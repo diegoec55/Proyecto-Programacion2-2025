@@ -1,0 +1,16 @@
+<%- include('../partials/header.ejs') %>
+
+    <div class="user-edit">
+        <h2>Editar usuario</h2>
+        <form class="formNew" action="/usuarios/edit/<%= usuario.id %>?_method=PUT" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input id="nombre" name="nombre" type="text" value="<%= usuario.nombre %>">
+    
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="text" value="<%= usuario.email %>">
+    
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+<%- include('../partials/footer.ejs') %>

@@ -148,6 +148,24 @@ const userController = {
                 })
             }
 
+            // si el usuario tiene imagen, eliminamos el arhcivo fisico
+            if(usuario.imagen){
+                //construimos la ruta completa al archivo
+                const imagePath = path.join(__dirname,'../public/images/usuarios', usuario.imagen);
+                console.log('intentando eliminar imagen:', imagePath);
+                //verificar que el arhcivo que queremos eliminar existe, antes de eliminarlo
+                if(fs.existsSync(imagePath)){
+                    try {
+                        fs.unlinkSync(imagePath);
+                        console.log('imagen eliminada exitosamente');
+                        
+                    } catch (error) {   
+                        console.error(" el archivo de imagen no existe en el servidor: ", imagePath)
+                        
+                    }
+                }                
+            }
+
             await usuario.destroy();
             res.redirect('/usuarios')
         } catch (error) {

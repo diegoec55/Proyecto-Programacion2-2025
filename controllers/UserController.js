@@ -120,12 +120,30 @@ const userController = {
             const { nombre, email } = req.body;
             const usuario = await db.Usuario.findByPk(req.params.id);
 
-            await usuario.update({
+            const updateData = {
                 nombre: nombre.trim(),
                 email: email.trim(),
-            });
+            }
 
-            res.redirect("/usuarios");
+            if(req.file){
+                if(usuario.imagen){
+                    const imagePath = path.join(__dirname,'../public/images/usuarios', usuario.imagen);
+
+                    if(fs.existsSync(imagePath)){
+                        try {
+                            fs.unlinkSync(imagePath);
+                            console.log('imagen anterior eliminada exitosamente');
+                        } catch (error) {   
+                            console.error(" elimando imagen anterior ", imagePath)
+                        }
+                    }                
+                }
+                updateData.imagen = req.file.filename
+            }
+
+            await usuario.update(updateData);
+
+            res.redirect(`/usuarios/${usuario.id}`);
         } catch (error) {
             console.log("Error al actualizar usuario:", error);
             res.render('errors/404', {

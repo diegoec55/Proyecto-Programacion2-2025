@@ -180,7 +180,7 @@ const productoController = {
     update: async ( req, res ) => {
         try {
             // obtenemos los datos del usuario, para actualizar
-            const { nombre, precio, descripcion, usuario_id, categorias} = req.body;       
+            const { nombre, precio, descripcion, usuario_id, categorias, imagenes_eliminar} = req.body;       
             
             // obtenemos el producto a actualizar
             const producto = await Producto.findByPk(req.params.id, {
@@ -203,7 +203,7 @@ const productoController = {
                         mensaje: 'El producto solicitado no existe',
                         url: req.url
                     })
-                }   
+                } 
 
             // actualizamos el producto con los nuevos del usuario
             await producto.update({
@@ -219,6 +219,35 @@ const productoController = {
             } else {
                 // si no se selecciono ninguna categoria, elimino todas
                 await producto.setCategorias([]);
+            }
+
+            if(imagenes_eliminar){
+                const idAeliminar = Array.isArray(imagenes_eliminar) ? imagenes_eliminar : [imagenes_eliminar]
+                for (const imgId of idAeliminar) {
+                    const imagen = await ProductoImagen.findByPk(imgId)
+                    if(imagen){
+                        const rutaImagen = `public/images/productos/${img.imagen}`;
+                        // Intentar borrar el archivo si existe
+                        if (fs.existsSync(rutaImagen)) {
+                            fs.unlinkSync(rutaImagen);
+                        }
+                        await img.destroy();
+                    }
+                }
+            }
+
+            if(req.files && req.files.length > 0) {
+                const imagenesActules = await ProductoImagen.count({where:{producto_id:req.params.id}})
+                const totalImagenes = imagenesActules+req.files.length
+                if(totalImagenes>5){
+                    throw new Error ("El producto no puede tener mas de 5 imagenes")
+                }
+                for (const file of req.files) {
+                    await ProductoImagen.create({
+                        producto_id:req.params.id,
+                        imagen:filename,
+                    })
+                }
             }
 
             // una vez que se actualizo todo, redirijo al detalle de producto

@@ -48,8 +48,42 @@
                 </div>
             <% }) %>
         </div>
+
+        <div>
+            <h3>Imagenes actuales:</h3>
+            <% if (producto.imagenes && producto.imagenes.length > 0) { %>
+             <div>
+                <% producto.imagenes.forEach(imagen => { %>
+                    <% console.log(imagen);%>
+                    <div>
+                        <img src="/images/productos/<%=imagen.imagen %>" alt="">
+                        <input type="checkbox"
+                                name="imagenes_eliminar"
+                                value="<%=imagen.id %>"
+                                id="img_<%=imagen.id %>"
+                        >
+                        <label for="img_<%=imagen.id %>">Eliminar esta imagen</label>
+                    </div>
+                <% }) %>
+             </div>
+            <% }else{ %>
+                <p>no hay imagenes para este producto</p>
+            <% } %>
+        </div>
+
+        <div>
+            <label for="imagenes_nuevas">Agregas nuevas imagenes</label>
+            <input  type="file"
+                    id="imagenes_nuevas"
+                    name="imagenes_nuevas"
+                    accept="image/*"
+                    multiple
+            >
+            <small>Selecciona hasta 5 imágenes (Considerando las actuales). Máximo 5MB cada una. Formatos: JPG, PNG, GIF</small>
+        </div>
+
             <button type="submit">Guardar</button>
-        <a href="/productos">Cancelar</a>
+        <a href="/productos/show/<%= producto.id %>">Cancelar</a>
     
     </form>
     

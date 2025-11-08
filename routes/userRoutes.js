@@ -16,7 +16,10 @@ router.post('/create',
 
 router.get('/edit/:id/',userController.edit)
 
-router.put('/edit/:id', userController.update)
+router.put('/edit/:id',
+    validations.usuario,
+    validations.handleErrors,
+    userController.update)
 
 router.delete('/:id', userController.destroy)
 

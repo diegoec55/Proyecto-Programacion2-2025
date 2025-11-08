@@ -131,7 +131,7 @@ const productoController = {
             const categorias =  await Categoria.findAll();
 
             return res.render('productos/create', {
-                errors: errors.array(),
+                errors: [{msg:"error creando producto"}],
                 oldData: req.body,
                 title: 'Crear Producto',
                 h1: 'Nuevo Producto',
@@ -182,9 +182,6 @@ const productoController = {
             // obtenemos los datos del usuario, para actualizar
             const { nombre, precio, descripcion, usuario_id, categorias} = req.body;       
             
-            if(!nombre || nombre.trim().length < 4 ){
-                throw new Error("el nombre debe tener 2 caracteres")
-            }
             // obtenemos el producto a actualizar
             const producto = await Producto.findByPk(req.params.id, {
                 include:[

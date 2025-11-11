@@ -184,8 +184,8 @@ const productoController = {
     update: async ( req, res ) => {
         try {
             // obtenemos los datos del usuario, para actualizar
-            const { nombre, precio, descripcion, usuario_id, categorias, imagenes_eliminar} = req.body;       
-            console.log("imagenes a eliminar: ",imagenes_eliminar);
+            const { nombre, precio, descripcion, usuario_id, categorias, imagenes_producto} = req.body;       
+            // console.log("imagenes a eliminar: ",imagenes_producto);
             
             // obtenemos el producto a actualizar
             const producto = await Producto.findByPk(req.params.id, {
@@ -205,7 +205,7 @@ const productoController = {
                     }
                 ]
             })
-            console.log("producto a editar: ", producto);
+            console.log("producto a editar: ", JSON.stringify(producto, null, 2));
             
                 if(!producto) {
                     return res.status(404).render('errors/404',{
@@ -232,17 +232,18 @@ const productoController = {
                 await producto.setCategorias([]);
             }
 
-            if(imagenes_eliminar){
-                const idAeliminar = Array.isArray(imagenes_eliminar) ? imagenes_eliminar : [imagenes_eliminar]
+            if(imagenes_producto){
+                const idAeliminar = Array.isArray(imagenes_producto) ? imagenes_producto : [imagenes_producto]
                 for (const imgId of idAeliminar) {
-                    const imagen = await ProductoImagen.findByPk(imgId)
-                    if(imagen){
-                        const rutaImagen = `public/images/productos/${img.imagen}`;
+                    const imagenEnDB = await ProductoImagen.findByPk(imgId)
+                    
+                    if(imagenEnDB){
+                        const rutaImagen = `public/images/productos/${imagenEnDB.imagen}`;
                         // Intentar borrar el archivo si existe
                         if (fs.existsSync(rutaImagen)) {
                             fs.unlinkSync(rutaImagen);
                         }
-                        await img.destroy();
+                        await imagenEnDB.destroy();
                     }
                 }
             }
@@ -251,12 +252,20 @@ const productoController = {
                 const imagenesActules = await ProductoImagen.count({where:{producto_id:req.params.id}})
                 const totalImagenes = imagenesActules+req.files.length
                 if(totalImagenes>5){
+                    for (const file of req.files) {
+                        
+                        const rutaImagen = `public/images/productos/${file.filename}`;
+                        // Intentar borrar el archivo si existe
+                        if (fs.existsSync(rutaImagen)) {
+                            fs.unlinkSync(rutaImagen);
+                        }
+                    }
                     throw new Error ("El producto no puede tener mas de 5 imagenes")
                 }
                 for (const file of req.files) {
                     await ProductoImagen.create({
                         producto_id:req.params.id,
-                        imagen:filename,
+                        imagen:file.filename,
                     })
                 }
             }
@@ -267,7 +276,23 @@ const productoController = {
         } catch (error) {
             console.log('error al actualizar producto: ',error);
             // en caso de error, recargar el formulario
-            const producto = await Producto.findByPk(req.params.id);
+            const producto = await Producto.findByPk(req.params.id, {
+                include:[
+                    {
+                        model:Usuario,
+                        as: 'dueño'
+                    },
+                    {
+                        model: Categoria,
+                        as: 'categorias',
+                        through: { attributes: []}
+                    },
+                    {
+                        model: ProductoImagen,
+                        as: 'imagenes',
+                    }
+                ]
+            })
             const usuarios = await Usuario.findAll();
             const categoriasAll = await Categoria.findAll();
             res.render('productos/edit',{
@@ -276,7 +301,8 @@ const productoController = {
                 categorias: categoriasAll,
                 h1: "Editar Producto",
                 title: `Producto: ${producto.nombre}`,
-                old: req.body
+                old: req.body,
+                error:error.message
             })
         }
     },

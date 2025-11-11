@@ -17,6 +17,7 @@ router.post('/create',
 router.get('/edit/:id/', productoController.edit)
 
 router.put('/edit/:id',
+    upload.array('imagenes_producto', 5),
     validations.productoUpdate,
     validations.handleErrors,
     productoController.update)

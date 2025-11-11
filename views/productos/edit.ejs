@@ -1,6 +1,6 @@
     <%- include('../partials/header',{h1:h1}) %>
 
-    <form action="/productos/edit/<%= producto.id %>?_method=PUT" method="POST">
+    <form action="/productos/edit/<%= producto.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
         <div>
             <label for="nombre"> Nombre:</label>
             <input  type="text"
@@ -58,7 +58,7 @@
                     <div>
                         <img src="/images/productos/<%=imagen.imagen %>" alt="">
                         <input type="checkbox"
-                                name="imagenes_eliminar"
+                                name="imagenes_producto"
                                 value="<%=imagen.id %>"
                                 id="img_<%=imagen.id %>"
                         >

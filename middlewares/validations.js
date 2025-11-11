@@ -104,6 +104,62 @@ const validations = {
                 return true;
             })
     ],
+    productoUpdate: [
+        body('nombre')
+            .notEmpty()
+            .withMessage('El nombre del producto es obligatorio')
+            .isLength({ min:4 ,max: 100})
+            .withMessage('El nombre debe tener entre 4 y 100 caracteres')
+            .trim(),
+        body('precio')
+            .notEmpty()
+            .withMessage('El precio es obligatorio')
+            .isFloat({min: 0.01})
+            .withMessage('El precio debe ser un numero mayor a 0') ,
+        body('descripcion')          
+            .notEmpty()
+            .withMessage('La descripcion del producto es obligatorio')
+            .isLength({ min:10 ,max: 500})
+            .withMessage('La descripciondebe tener entre 10 y 500 caracteres')
+            .trim(),
+        body('usuario_id')
+            .notEmpty()
+            .withMessage('Debes seleccionar un dueño para el producto')
+            .isInt()
+            .withMessage("'El dueño debe ser valido")
+            .custom(async (value) => {
+                const usuario = await Usuario.findByPk(value)
+                if(!usuario){
+                    throw new Error('El usuario seleccionado no existe')
+                }
+                return true;
+            }),
+        body('imagenes_producto')
+            .custom( (value, {req}) => {
+                if(req.files){
+                    if(req.files.length > 5){
+                        throw new Error("Puedes subir maximo 5 imagenes del producto")
+                    }
+                    const extensionesPermitidas = [ ".jpg", ".jpeg", ".png", ".gif"];
+                    req.files.forEach((file, index) => {
+                        const extension = path.extname(file.originalname).toLowerCase();
+    
+                        if(!extensionesPermitidas.includes(extension)){
+                            throw new Error(
+                                `Imagen ${index + 1}: Las extensiones permitidas son: ${extensionesPermitidas.join(', ')}`
+                            )
+                        }
+    
+                        const maxSize = 5 * 1024 * 1024; // 5mb
+                        if( file.size > maxSize){
+                            throw new Error(
+                                `Imagen ${index + 1}: El tamaño maximo es de 5mb`)
+                        }
+                    });
+                }
+                return true;
+            })
+    ],
     categoria: [
         body('nombre')
             .notEmpty()

@@ -17,7 +17,7 @@ router.post('/create',
 router.get('/edit/:id/', productoController.edit)
 
 router.put('/edit/:id',
-    validations.producto,
+    validations.productoUpdate,
     validations.handleErrors,
     productoController.update)
 

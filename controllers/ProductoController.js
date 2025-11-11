@@ -154,6 +154,10 @@ const productoController = {
                         model: Categoria,
                         as: 'categorias',
                         through: { attributes: []}
+                    },
+                    {
+                        model: ProductoImagen,
+                        as: 'imagenes',
                     }
                 ]
             });
@@ -181,6 +185,7 @@ const productoController = {
         try {
             // obtenemos los datos del usuario, para actualizar
             const { nombre, precio, descripcion, usuario_id, categorias, imagenes_eliminar} = req.body;       
+            console.log("imagenes a eliminar: ",imagenes_eliminar);
             
             // obtenemos el producto a actualizar
             const producto = await Producto.findByPk(req.params.id, {
@@ -193,9 +198,15 @@ const productoController = {
                         model: Categoria,
                         as: 'categorias',
                         through: { attributes: []}
+                    },
+                    {
+                        model: ProductoImagen,
+                        as: 'imagenes',
                     }
                 ]
             })
+            console.log("producto a editar: ", producto);
+            
                 if(!producto) {
                     return res.status(404).render('errors/404',{
                         title: "producto no encontrado",

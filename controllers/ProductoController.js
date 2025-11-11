@@ -184,8 +184,7 @@ const productoController = {
     update: async ( req, res ) => {
         try {
             // obtenemos los datos del usuario, para actualizar
-            const { nombre, precio, descripcion, usuario_id, categorias, imagenes_producto} = req.body;       
-            // console.log("imagenes a eliminar: ",imagenes_producto);
+            const { nombre, precio, descripcion, usuario_id, categorias, imagenes_eliminar} = req.body;
             
             // obtenemos el producto a actualizar
             const producto = await Producto.findByPk(req.params.id, {
@@ -232,8 +231,8 @@ const productoController = {
                 await producto.setCategorias([]);
             }
 
-            if(imagenes_producto){
-                const idAeliminar = Array.isArray(imagenes_producto) ? imagenes_producto : [imagenes_producto]
+            if(imagenes_eliminar){
+                const idAeliminar = Array.isArray(imagenes_eliminar) ? imagenes_eliminar : [imagenes_eliminar]
                 for (const imgId of idAeliminar) {
                     const imagenEnDB = await ProductoImagen.findByPk(imgId)
                     

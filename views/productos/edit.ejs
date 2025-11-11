@@ -54,11 +54,10 @@
             <% if (producto.imagenes && producto.imagenes.length > 0) { %>
              <div>
                 <% producto.imagenes.forEach(imagen => { %>
-                    <% console.log(imagen);%>
                     <div>
                         <img src="/images/productos/<%=imagen.imagen %>" alt="">
                         <input type="checkbox"
-                                name="imagenes_producto"
+                                name="imagenes_eliminar"
                                 value="<%=imagen.id %>"
                                 id="img_<%=imagen.id %>"
                         >
@@ -72,10 +71,10 @@
         </div>
 
         <div>
-            <label for="imagenes_nuevas">Agregas nuevas imagenes</label>
+            <label for="imagenes_producto">Agregas nuevas imagenes</label>
             <input  type="file"
-                    id="imagenes_nuevas"
-                    name="imagenes_nuevas"
+                    id="imagenes_producto"
+                    name="imagenes_producto"
                     accept="image/*"
                     multiple
             >

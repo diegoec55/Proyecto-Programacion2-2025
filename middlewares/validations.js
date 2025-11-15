@@ -4,9 +4,8 @@ const fs = require('fs');
 const path = require("path");
 
 const validations = {
-    // VALIDACIONES PARA LA CREACION DE USUARIOS
 
-    usuario: [
+    register: [
         body('nombre')
             .notEmpty()
             .withMessage('El nombre es obligatorio')
@@ -18,12 +17,25 @@ const validations = {
             .withMessage('El email es obligatorio')
             .isEmail()
             .withMessage('Debe ser un email valido')
-            .normalizeEmail()// conviuerte a minusculas y lo normaliza
+            .normalizeEmail()// pasa a minusculas y lo normaliza
             .custom( async (email) => {
-                // VALIDACION CUSTOM: email debe ser unico
                 const existeUsuario = await Usuario.findOne({ where: {email}});
                 if(existeUsuario){
                     throw new Error("Este mail ya esta registrado")
+                }
+                return true;
+            }),
+        body("password")
+            .notEmpty()
+            .withMessage("la contraseña es obligatoria")
+            .isLength({min: 6})
+            .withMessage("LA CONTRASEÑA DEBE TENER UN MINIMO DE 6 CARACTERES")     ,       
+        body("re-password")
+            .notEmpty()
+            .withMessage("Debes confirmar contraseña")
+            .custom((value, {req})=>{
+                if(req.body.password != value){
+                    throw new Error("Las contraseñas no coinciden")
                 }
                 return true;
             }),
@@ -32,7 +44,7 @@ const validations = {
                 // el objeto request desestructurado, tiene la info del archivo subido
                 // req.file,. multer guarda el archjivo alli
                 if(!req.file) {
-                    throw new Error('Debes subir una imagen de perfil');
+                    return true; //imagen opcional
                 };
 
                 // 
@@ -44,9 +56,54 @@ const validations = {
                         `Las extensuiones permitidas son: ${extensionesPermitidas.join(', ')}`
                     )
                 }
+                    const maxSize = 5 * 1024 * 1024; // 5mb
+                    if( req.file.size > maxSize){
+                        throw new Error(
+                            `El tamaño maximo de la imagen es de 5mb`)
+                    }
                 return true
             })
     ],
+    login: [
+            body('email')
+                .notEmpty()
+                .withMessage('El email es obligatorio')
+                .isEmail()
+                .withMessage('Debe ser un email valido')
+                .normalizeEmail()
+                .custom( async (email, {req}) => {
+                    const usuario = await Usuario.findOne({ where: {email}});
+                    if(!usuario){
+                        throw new Error("Credenciales invalidas")
+                    }
+                    // puedo guardar el usario en req, para usarlo despues
+                    req.usuarioEncontrado = usuario;
+                    return true;
+                }),
+            body("password")
+                .notEmpty()
+                .withMessage("la contraseña es obligatoria")
+                .custom((password, {req})=> {
+                    const bcrypt= require("bcryptjs");
+    
+                    // verifico que tenemos el usuario del paso anterior
+                    if(!req.usuarioEncontrado){
+                        throw new Error("Credenciales Invalidas")
+                    }
+                    // comparo el password
+                    const passwordCorrecta = bcrypt.compareSync(
+                        password,
+                        req.usuarioEncontrado.password
+                    )
+    
+                    if(!passwordCorrecta){
+                        throw new Error("Credenciales Invalidas")
+                    }
+    
+                    return true;
+    
+                })  
+        ],
     producto: [
         body('nombre')
             .notEmpty()
@@ -198,6 +255,25 @@ const validations = {
 
         const isProducto = req.originalUrl.includes('producto');
         const isCategoria = req.originalUrl.includes("categoria");
+        const isRegister = req.originalUrl.includes('register');
+        const isLogin = req.originalUrl.includes('login');
+
+        if(isRegister){
+            return res.render('auth/register',{
+                errors: errors.array(),
+                oldData: req.body,
+                title: "Registro",
+                h1: "Crear cuenta"
+            })
+        }
+        if(isLogin){
+            return res.render('auth/login',{
+                errors: errors.array(),
+                oldData: req.body,
+                title: "Login",
+                h1: "Iniciar Sesion"
+            })
+        }
 
         if(isProducto){
             try {
@@ -226,14 +302,7 @@ const validations = {
             h1: "Nueva Categoría"
         });
     }
-
-        // RenderizaR EL FORMULARIO CON ERRORES
-        return res.render('usuarios/create', {
-            errors: errors.array(), // Array simple de errores
-            oldData: req.body, // Datos que escribio el usuario
-            title: "Crear Usuario",
-            h1: 'Nuevo Usuario'
-        })
+    return res.status(500).send("Error de validacion no manejado");
     }
 }
 

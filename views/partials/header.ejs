@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +16,13 @@
         @font-face {
             font-family: 'tan-mon-cheri';
             src: url('/fonts/tan-mon-cheri.woff2') format('woff2'),
-                 url('/fonts/tan-mon-cheri.woff') format('woff');
+                url('/fonts/tan-mon-cheri.woff') format('woff');
             font-weight: normal;
             font-style: normal;
         }
     </style>
 </head>
+
 <body>
     <header>
         <section class="titulo-barra">
@@ -36,7 +38,7 @@
                 <img src="images/cart-outline.svg" alt="">
                 </a> -->
             </div>
-        </section>          
+        </section>
         <nav class="nav-bar">
             <ul>
                 <li><a href="/">Inicio</a></li>
@@ -51,10 +53,17 @@
                 <li><a href="/categorias" class="btn3">Categorias</a></li>
                 <li><a href="/infoaromas" class="btn3">Aromas</a></li>
                 <li><a href="/about" class="btn4">Sobre Ambar</a></li>
+                <% if (session.userRol==='admin' ) { %>
+
+                    <span style="color: white; border: solid 1px;">
+                        ADMIN
+                    </span>
+                    <% } %>
+                        </span>
             </ul>
         </nav>
     </header>
 
-        <!-- Cargar dayjs desde CDN -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <!-- Cargar dayjs desde CDN -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
         <script src="/js/day.js"></script> -->

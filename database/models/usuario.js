@@ -17,6 +17,16 @@ module.exports = ( sequelize, Datatypes ) => {
       allowNull: false,
       unique: true, 
     },
+    password: {
+      type: Datatypes.STRING(255),
+      allowNull: false
+    },
+    rol: {
+      type: Datatypes.ENUM('user', 'admin'),
+      defaultValue: 'user',
+      allowNull: false,
+      comment: "Rol de usuario: user (usuario normal) o admin (administrador)"
+    },
     imagen: {
       type: Datatypes.STRING(255),
       allowNull: true,

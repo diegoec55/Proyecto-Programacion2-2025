@@ -1,5 +1,5 @@
 'use strict';
-
+const bcrypt = require("bcryptjs");
 const { query } = require('express-validator');
 
 /** @type {import('sequelize-cli').Migration} */
@@ -10,28 +10,36 @@ module.exports = {
           {
             nombre: "Diego Comisso",
             email: "diego@gmail.com",
-            imagen: "perfil1",
+            password: bcrypt.hashSync("123456", 10),
+            rol: "admin",
+            imagen: "perfil1.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
           {
             nombre: "Juan Gomez",
             email: "juan@gmail.com",
-            imagen: "perfil2",
+            password: bcrypt.hashSync("123456", 10),
+            rol: "user",
+            imagen: "perfil2.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
           {
             nombre: "Pedro Martinez",
             email: "pedro@gmail.com",
-            imagen: "perfil3",
+            password: bcrypt.hashSync("123456", 10),
+            rol: "user",
+            imagen: "perfil3.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
           {
             nombre: "Araceli Gonzalez",
             email: "Araceli@gmal.com",
-            imagen: "perfil4",
+            password: bcrypt.hashSync("123456", 10),
+            rol: "user",
+            imagen: "perfil4.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },

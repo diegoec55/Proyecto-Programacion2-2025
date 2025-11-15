@@ -18,6 +18,19 @@ module.exports = {
         allowNull:false,
         unique:true
       },
+      password: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+      },
+      rol: {
+        type: Sequelize.ENUM('user', 'admin'),
+        allowNull: false,
+        defaultValue: 'user'
+      },
+      imagen: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

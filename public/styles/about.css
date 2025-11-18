@@ -89,7 +89,6 @@ input:focus, textarea:focus {
 }
 
 button {
-    width: 300px;
     padding: 10px 20px;
     background-color: #000000;
     color: white;

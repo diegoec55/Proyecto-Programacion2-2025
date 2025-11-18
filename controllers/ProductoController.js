@@ -170,6 +170,16 @@ const productoController = {
                     url: req.url
                 })
             }
+            console.log("producto: ",JSON.stringify(producto,null,4));
+            
+            if(producto.dueño.id!=req.user.id && req.user.rol != "admin"){
+                return res.status(403).render('errors/403',{
+                    title: "acceso denegado",
+                    h1: 'error 403',
+                    mensaje: 'No tenes permiso para editar este producto',
+                })
+            }
+
             res.render('productos/edit', {
                 title: `Producto: ${producto.nombre}`,
                 producto: producto,
@@ -214,6 +224,14 @@ const productoController = {
                         url: req.url
                     })
                 } 
+
+                if(producto.dueño.id!=req.user.id && req.user.rol != "admin"){
+                return res.status(403).render('errors/403',{
+                    title: "acceso denegado",
+                    h1: 'error 403',
+                    mensaje: 'No tenes permiso para editar este producto',
+                })
+            }
 
             // actualizamos el producto con los nuevos del usuario
             await producto.update({
@@ -321,6 +339,14 @@ const productoController = {
                     h1: 'error 404',
                     mensaje: 'El producto solicitado no existe',
                     url: req.url
+                })
+            }
+
+            if(producto.dueño.id!=req.user.id && req.user.rol != "admin"){
+                return res.status(403).render('errors/403',{
+                    title: "acceso denegado",
+                    h1: 'error 403',
+                    mensaje: 'No tenes permiso para editar este producto',
                 })
             }
 

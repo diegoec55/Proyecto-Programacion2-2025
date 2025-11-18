@@ -88,6 +88,11 @@ const adminController = {
                 console.log("usuario no encontrado", id);
                 return res.status(404).send('usuario no encontrado');                
             }
+
+            if(usuario.id == req.user.id && nuevoRol == user){
+                return res.status(400).send("No te podes quiar tu rol de Admin")
+            }
+
             const rolAnterior = usuario.rol;
             //paso 3: actualizamos el rol y duardamos en la db
             usuario.rol = nuevoRol;
@@ -99,15 +104,40 @@ const adminController = {
             console.log(` de: ${rolAnterior} a ${nuevoRol}`);            
 
             res.redirect('/admin/usuarios')
-            
 
             
         } catch (error) {
-            
+            console.error("Error al cambiar rol: ",error)
+            res.redirect("/admin/usuario")
         }
     },
-    eliminarUsuario: (req, res ) => {
-        res.send("Eliminar usuario en construccion")
+    eliminarUsuario: async (req, res ) => {
+        try {
+            const {id} = req.params
+            const usuario = await Usuario.findByPk(id);
+            if(!usuario){
+                return res.status(404).send("Usuaruo no encontrado")
+            }
+            if(usuario.id == req.user.id){
+                return res.status(400).send("No podes eliminarte a vos mismo")
+            }
+            if(usuario.imagen){
+                const fs = require("fs")
+                const path = require("path")
+                const imagePath = path.join(__dirname,"../public/images/usuarios",usuario.imagen)
+                if(fs.existsSync(imagePath)){
+                    fs.unlinkSync(imagePath)
+                    console.log("Imgagen eliminada: ", usuario.imagen);
+                }
+                
+            }
+            console.log(`Eliminado usuario: ${usuario.nombre} - ${usuario.email}`);
+            await usuario.destroy()
+            res.redirect("/admin/usuarios")
+        } catch (error) {
+            console.error("Error al eliminar ususario: ",error)
+            res.redirect("/admin/usuarios")
+        }
     },
 }
 

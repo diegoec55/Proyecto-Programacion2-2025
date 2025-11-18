@@ -1,0 +1,104 @@
+<%- include('../partials/header') %>
+
+<div class="admin-container">
+
+    <!-- Header del admin -->
+    <div class="admin-header">
+        <h1>🎯 Panel de Administración</h1>
+        <p>
+            Bienvenido, <strong><%= session.userName %></strong>  
+            Aquí podés gestionar todo el sistema.
+        </p>
+    </div>
+
+    <!-- Estadísticas -->
+    <h2 class="section-title">📊 Estadísticas del Sistema</h2>
+
+    <div class="grid stats-grid">
+
+        <!-- Total Usuarios -->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <h6>Total Usuarios</h6>
+                    <span class="badge">🕵️‍♂️</span>
+                </div>
+                <h2 class="number"><%= stats.totalUsuarios %></h2>
+            </div>
+        </div>
+
+        <!-- Administradores -->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <h6>Administradores</h6>
+                    <span class="badge">🕵️‍♂️</span>
+                </div>
+                <h2 class="number"><%= stats.adminCount %></h2>
+            </div>
+        </div>
+
+        <!-- Usuarios normales -->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <h6>Usuarios Normales</h6>
+                    <span class="badge">🕵️‍♂️</span>
+                </div>
+                <h2 class="number"><%= stats.userCount %></h2>
+            </div>
+        </div>
+
+        <!-- Total productos -->
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <h6>Total Productos</h6>
+                    <span class="badge">🕵️‍♂️</span>
+                </div>
+                <h2 class="number"><%= stats.totalProductos %></h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Acciones rápidas -->
+    <h2 class="section-title">💥 Acciones Rápidas</h2>
+
+    <div class="grid actions-grid">
+
+        <!-- Gestionar usuarios -->
+        <div class="card action-card">
+            <div class="card-body text-center">
+                <div class="icon">👪</div>
+                <h5>Gestionar Usuarios</h5>
+                <p>Ver, editar y cambiar roles de usuarios</p>
+                <a href="/admin/usuarios" class="btn">Ver Usuarios</a>
+            </div>
+        </div>
+
+        <!-- Gestionar productos -->
+        <div class="card action-card">
+            <div class="card-body text-center">
+                <div class="icon">📦</div>
+                <h5>Gestionar Productos</h5>
+                <p>Crear, editar y eliminar productos</p>
+                <a href="/productos" class="btn">Ver Productos</a>
+            </div>
+        </div>
+
+        <!-- Crear producto -->
+        <div class="card action-card">
+            <div class="card-body text-center">
+                <div class="icon">➕</div>
+                <h5>Crear Producto</h5>
+                <p>Agregar productos al sistema</p>
+                <a href="/productos/create" class="btn">Crear Producto</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,123 @@
+<%- include('../partials/header') %>
+
+<div class="page-container">
+
+    <!-- Header simple -->
+    <div class="page-header">
+        <h1><%= h1 %></h1>
+
+        <a href="/admin/dashboard" class="btn-secondary">
+            ← Volver al dashboard
+        </a>
+    </div>
+
+    <!-- Card contenedor -->
+    <div class="card">
+        <div class="card-body no-padding">
+
+            <!-- Tabla -->
+            <div class="table-wrapper">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Fecha Registro</th>
+                            <th style="width: 200px;">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% usuarios.forEach(usuario => { %>
+                        <tr>
+
+                            <!-- ID -->
+                            <td>
+                                <span class="badge badge-dark">#<%= usuario.id %></span>
+                            </td>
+
+                            <!-- Avatar -->
+                            <td>
+                                <% if (usuario.imagen) { %>
+                                    <img src="/images/usuarios/<%= usuario.imagen %>"
+                                         alt="<%= usuario.nombre %>"
+                                         class="avatar">
+                                <% } else { %>
+                                    <img src="https://ui-avatars.com/api/?name=<%= usuario.nombre %>&background=0D6EFD&color=fff&size=40"
+                                         alt="<%= usuario.nombre %>"
+                                         class="avatar">
+                                <% } %>
+                            </td>
+
+                            <!-- Nombre -->
+                            <td><strong><%= usuario.nombre %></strong></td>
+
+                            <!-- Email -->
+                            <td><strong><%= usuario.email %></strong></td>
+
+                            <!-- Rol -->
+                            <td>
+                                <% if (usuario.rol === 'admin') { %>
+                                    <span class="badge badge-red">ADMIN</span>
+                                <% } else { %>
+                                    <span class="badge badge-blue">USER</span>
+                                <% } %>
+                            </td>
+
+                            <!-- Fecha -->
+                            <td>
+                                <%= new Date(usuario.created_at).toLocaleDateString('es-AR') %>
+                            </td>
+
+                            <!-- Acciones -->
+                            <td>
+                                <div class="action-group">
+
+                                    <!-- Ver perfil -->
+                                    <a href="/usuarios/<%= usuario.id %>" class="btn-small btn-info">
+                                        Ver perfil
+                                    </a>
+
+                                    <% if (usuario.id !== session.userId) { %>
+
+                                        <!-- Cambiar rol -->
+                                        <form action="/admin/usuarios/<%= usuario.id %>/cambiar-rol?_method=PUT" method="POST">
+                                            <select name="nuevoRol"
+                                                    onchange="this.form.submit()">
+                                                <option value="user" <%= usuario.rol === "user" ? "selected" : "" %>>User</option>
+                                                <option value="admin" <%= usuario.rol === "admin" ? "selected" : "" %>>Admin</option>
+                                            </select>
+                                        </form>
+
+                                        <!-- Eliminar -->
+                                        <form action="/admin/usuarios/<%= usuario.id %>?_method=DELETE" method="POST">
+                                            <button class="btn-small btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">
+                                                Eliminar
+                                            </button>
+                                        </form>
+
+                                    <% } else { %>
+
+                                        <span class="badge badge-dark">Vos mismo</span>
+
+                                    <% } %>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                        <% }) %>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>

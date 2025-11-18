@@ -53,14 +53,27 @@
                 <li><a href="/categorias" class="btn3">Categorias</a></li>
                 <li><a href="/infoaromas" class="btn3">Aromas</a></li>
                 <li><a href="/about" class="btn4">Sobre Ambar</a></li>
-                <% if (session.userRol==='admin' ) { %>
+                <% if(session && session.userId){ %>
+                    <% if (session.userRol==='admin' ) { %>
 
-                    <span style="color: white; border: solid 1px;">
-                        ADMIN
-                    </span>
-                    <% } %>
+                        <span style="color: white; border: solid 1px;">
+                            ADMIN
                         </span>
+                        <a href="/admin/dashboard"> Dashboard </a>
+                        <% } %>
+                            </span>
+                            <form action="/auth/logout" method="POST" style="display: inline;">
+                                <button type="submit"
+                                    style="background: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 8px;">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
             </ul>
+            <% } else {%>
+                <!-- Usuario no Logueado -->
+                <a href="/auth/login"> Login </a>
+                <a href="/auth/register"> Registrate </a>
+                <% } %>
         </nav>
     </header>
 

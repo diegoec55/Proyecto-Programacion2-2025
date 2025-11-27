@@ -23,14 +23,14 @@
           const nombresCategorias = producto.categorias.map(c => c.nombre).join(' ');
       %>
         <a class="velacardAll" 
-           href="/productos/show/<%= producto.id %>" 
-           data-categorias="<%= nombresCategorias %>">
+            href="/productos/show/<%= producto.id %>" 
+            data-categorias="<%= nombresCategorias %>">
           <div class="velacard" id="vela<%= producto.id %>">
 
             <% if (producto.imagenes && producto.imagenes.length > 0) { %>
-              <img src="/images/productos/<%= producto.imagenes[0].imagen %>" alt="Vela <%= producto.nombre %>" />
+              <img src="<%= producto.imagenes[0].imagen %>" alt="Vela <%= producto.nombre %>" />
               <% if (producto.imagenes.length > 1) { %>
-                <img class="hover-image" src="/images/productos/<%= producto.imagenes[1].imagen %>" alt="Vela <%= producto.nombre %> Hover" />
+                <img class="hover-image" src="<%= producto.imagenes[1].imagen %>" alt="Vela <%= producto.nombre %> Hover" />
               <% } %>
             <% } else { %>
               <img src="/images/no-image.jpg" alt="Sin imagen disponible" />

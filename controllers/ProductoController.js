@@ -1,6 +1,7 @@
 const { log } = require('console');
 const{ Producto, Usuario, Categoria, ProductoImagen } = require('../database/models');
 const fs = require('fs');
+const {deleteImage} = require("../config/cloudinaryHelper")
 
 const productoController = {
 
@@ -112,11 +113,11 @@ const productoController = {
             
             // CORRECCIÓN: ProductoImagen con mayúscula
             for(const file of req.files){
-                console.log("Guardando Imagen: ", file.filename);
+                console.log("Guardando Imagen de cloudinary: ", file.path);
 
                 await ProductoImagen.create({
                     producto_id: nuevoProducto.id,
-                    imagen: file.filename
+                    imagen: file.path
                 })                
             }            
 
@@ -127,6 +128,13 @@ const productoController = {
             
             res.redirect(`/productos/show/${nuevoProducto.id}`)
         } catch (error) {
+
+            if(req.files && req.files.length > 0) {
+                for (const file of req.files) {
+                    await deleteImage(file.path)
+                }
+            }
+
             const usuarios = await Usuario.findAll();
             const categorias =  await Categoria.findAll();
 
@@ -255,11 +263,7 @@ const productoController = {
                     const imagenEnDB = await ProductoImagen.findByPk(imgId)
                     
                     if(imagenEnDB){
-                        const rutaImagen = `public/images/productos/${imagenEnDB.imagen}`;
-                        // Intentar borrar el archivo si existe
-                        if (fs.existsSync(rutaImagen)) {
-                            fs.unlinkSync(rutaImagen);
-                        }
+                        await deleteImage(imagenEnDB.imagen)
                         await imagenEnDB.destroy();
                     }
                 }
@@ -270,11 +274,7 @@ const productoController = {
                 const totalImagenes = imagenesActules+req.files.length
                 if(totalImagenes>5){
                     for (const file of req.files) {
-                        
-                        const rutaImagen = `public/images/productos/${file.filename}`;
-                        // Intentar borrar el archivo si existe
-                        if (fs.existsSync(rutaImagen)) {
-                            fs.unlinkSync(rutaImagen);
+                        await deleteImage(file.path)
                         }
                     }
                     throw new Error ("El producto no puede tener mas de 5 imagenes")
@@ -282,10 +282,9 @@ const productoController = {
                 for (const file of req.files) {
                     await ProductoImagen.create({
                         producto_id:req.params.id,
-                        imagen:file.filename,
+                        imagen:file.path,
                     })
                 }
-            }
 
             // una vez que se actualizo todo, redirijo al detalle de producto
             res.redirect(`/productos/show/${producto.id}`);
@@ -353,11 +352,7 @@ const productoController = {
             // 🔹 1️⃣ Eliminar imágenes asociadas del sistema de archivos y la base de datos
             if (producto.imagenes && producto.imagenes.length > 0) {
                 for (const img of producto.imagenes) {
-                    const rutaImagen = `public/images/productos/${img.imagen}`;
-                    // Intentar borrar el archivo si existe
-                    if (fs.existsSync(rutaImagen)) {
-                        fs.unlinkSync(rutaImagen);
-                    }
+                    await deleteImage(img.imagen)
                     await img.destroy();
                 }
             }

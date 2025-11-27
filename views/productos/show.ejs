@@ -6,7 +6,7 @@
             <h3>Imágenes del producto (<%= producto.imagenes.length %>):</h3>
             <div class="producto-imagenes">
                 <% producto.imagenes.forEach((imagen, index) => { %>
-                    <img src="/images/productos/<%= imagen.imagen %>" alt="<%= producto.nombre %> - imagen - <%= index + 1 %>">
+                    <img src="<%= imagen.imagen %>" alt="<%= producto.nombre %> - imagen - <%= index + 1 %>">
                 <% }) %>
             </div>
         </div>

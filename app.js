@@ -3,7 +3,8 @@ const app = express();
 require('dotenv').config();
 const path = require('path');
 const methodOverride = require('method-override');
-const session = require('express-session');
+// const session = require('express-session');
+const ironSessionMiddleware = require("./middlewares/ironSessionMiddleware")
 
 const db = require('./database/models')
 
@@ -17,14 +18,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, 'views'));
 
-app.use(session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24  // 1 dia en milisegundos
-    }
-}));
+// app.use(session({
+//     secret: process.env.SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         maxAge: 1000 * 60 * 60 * 24  1 dia en milisegundos
+//     }
+// }));
+
+app.use(ironSessionMiddleware)
 
 // middlewarae para hacer session disponible en todas vistas
 const sessionLocals = require("./middlewares/sessionLocals");

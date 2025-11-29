@@ -327,6 +327,10 @@ const productoController = {
             const producto = await Producto.findByPk(req.params.id, {
                 include: [
                     {
+                        model: Usuario,
+                        as: 'dueño'
+                    },
+                    {
                         model: ProductoImagen,
                         as: 'imagenes'
                     }

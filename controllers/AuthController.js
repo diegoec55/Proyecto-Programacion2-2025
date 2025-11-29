@@ -43,6 +43,7 @@ const authController = {
             // paso 4: Loguear automaticamente, (guardar en sesion)
             req.session.userId = nuevoUsuario.id;
             req.session.userName = nuevoUsuario.nombre;
+            await req.session.save() //ironSession
 
             // paso 5 : redirigir al home
             res.redirect(`/usuarios/${nuevoUsuario.id}`)
@@ -74,7 +75,10 @@ const authController = {
             // 6 si el password, es valido, guardar en sesion
             req.session.userId = usuario.id
             req.session.userName = usuario.nombre
-            req.session.userRol = usuario.rol; 
+            req.session.userRol = usuario.rol;
+            //hay que guardar la sesion para iron session
+            await req.session.save()
+
             // 7-redirigo al home. 
             res.redirect('/')
         } catch (error) {
@@ -87,13 +91,14 @@ const authController = {
                 })
         }
     },
-    logout: ( req, res ) => {
+    logout: async ( req, res ) => {
         req.session.destroy((err)=>{
             if(err){
                 console.error("Error al cerrar sesion: ",  err)
             }
             res.redirect("/");
         })
+        await req.session.save()
     }
 }
 

@@ -52,10 +52,10 @@
         <div>
             <h3>Imagenes actuales:</h3>
             <% if (producto.imagenes && producto.imagenes.length > 0) { %>
-             <div>
+             <div style="display: flex; gap: 20px;">
                 <% producto.imagenes.forEach(imagen => { %>
-                    <div>
-                        <img src="/images/productos/<%=imagen.imagen %>" alt="">
+                    <div class="producto-imagenes">
+                        <img src="<%=imagen.imagen %>" alt="">
                         <input type="checkbox"
                                 name="imagenes_eliminar"
                                 value="<%=imagen.id %>"

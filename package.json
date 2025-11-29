@@ -19,6 +19,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "express-validator": "^7.3.0",
+    "iron-session": "^8.0.4",
     "method-override": "^3.0.0",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",

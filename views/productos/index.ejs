@@ -1,8 +1,12 @@
 <%- include('../partials/header') %>
 
-<div class="product-all">
-  <a href="/productos/create">Agregar producto</a>
-</div>
+<% if(session && session.userId){ %>
+  <% if (session.userRol==='admin' ) { %>
+    <div class="product-all">
+      <a href="/productos/create">Agregar producto</a>
+    </div>
+  <% } %>
+<% } %>
 
 <div class="productos-contenedor">
   <aside class="filtros">

@@ -18,9 +18,6 @@
     <p><strong>Precio:</strong> $ <%= Number(producto.precio).toLocaleString('es-AR', { minimumFractionDigits: 0 }) %></p>
     <p><strong>Descripción:</strong> <%= producto.descripcion %></p>
 
-    <h3>Dueño:</h3>
-    <a href="/usuarios/<%= producto.dueño.id %>"><%= producto.dueño.nombre %></a>
-
     <h3>Categorías:</h3>
     <% if (producto.categorias.length > 0) { %>
         <% producto.categorias.forEach(categoria => { %>

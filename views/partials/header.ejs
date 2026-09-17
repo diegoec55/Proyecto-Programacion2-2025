@@ -50,7 +50,6 @@
                         <li><a href="combos.html">Combos</a></li> -->
                     </ul>
                 </li>
-                <li><a href="/categorias" class="btn3">Categorias</a></li>
                 <li><a href="/infoaromas" class="btn3">Aromas</a></li>
                 <li><a href="/about" class="btn4">Sobre Ambar</a></li>
                 <% if(session && session.userId){ %>
@@ -60,6 +59,7 @@
                             ADMIN
                         </span>
                         <a href="/admin/dashboard"> Dashboard </a>
+                        <a href="/categorias" class="btn3">Categorias</a>
                         <% } %>
                             </span>
                             <form action="/auth/logout" method="POST" style="display: inline;">

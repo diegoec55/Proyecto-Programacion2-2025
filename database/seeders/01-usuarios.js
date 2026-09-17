@@ -9,10 +9,9 @@ module.exports = {
     await queryInterface.bulkInsert('usuarios',[
           {
             nombre: "Diego Comisso",
-            email: "diego@gmail.com",
+            email: "diegocomisso@gmail.com",
             password: bcrypt.hashSync("123456", 10),
             rol: "admin",
-            imagen: "perfil1.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
@@ -21,7 +20,6 @@ module.exports = {
             email: "juan@gmail.com",
             password: bcrypt.hashSync("123456", 10),
             rol: "user",
-            imagen: "perfil2.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
@@ -30,7 +28,6 @@ module.exports = {
             email: "pedro@gmail.com",
             password: bcrypt.hashSync("123456", 10),
             rol: "user",
-            imagen: "perfil3.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },
@@ -39,7 +36,6 @@ module.exports = {
             email: "Araceli@gmal.com",
             password: bcrypt.hashSync("123456", 10),
             rol: "user",
-            imagen: "perfil4.jpg",
             created_at: new Date(),
             updated_at: new Date()
           },

@@ -29,11 +29,16 @@
 
     <div>
         <a href="/productos">Volver a productos</a>
-        <a href="/productos/edit/<%= producto.id %>">Editar</a>
 
-        <form action="/productos/<%= producto.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar producto?')">
-            <button type="submit">Eliminar</button>
-        </form>
+        <% if(session && session.userId){ %>
+            <% if (session.userRol==='admin' ) { %>
+                <a href="/productos/edit/<%= producto.id %>">Editar</a>
+
+                <form action="/productos/<%= producto.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar producto?')">
+                    <button type="submit">Eliminar</button>
+                </form>
+            <% } %>
+        <% } %>
     </div>
 </div>
 

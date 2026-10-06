@@ -91,14 +91,9 @@ const authController = {
                 })
         }
     },
-    logout: async ( req, res ) => {
-        req.session.destroy((err)=>{
-            if(err){
-                console.error("Error al cerrar sesion: ",  err)
-            }
-            res.redirect("/");
-        })
-        await req.session.save()
+    logout: ( req, res ) => {
+        req.session.destroy();
+        return res.redirect("/");
     }
 }
 
